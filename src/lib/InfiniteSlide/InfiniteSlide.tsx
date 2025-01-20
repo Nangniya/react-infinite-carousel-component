@@ -1,24 +1,83 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { IProps } from './InfiniteSlide.types';
 import * as S from './InfiniteSlide.styles';
+import GlobalStyle from '../../styles/GlobalStyle';
 
-const InfiniteSlide: React.FC<IProps> = ({ auto, children, leftArrow, rightArrow }) => {
+const InfiniteSlide: React.FC<IProps> = ({
+  auto = false,
+  slidesToShow = 1,
+  slidesToScroll = 1,
+  children,
+  leftArrow,
+  rightArrow,
+  gap = 0,
+}) => {
   const [currentSlide, setCurrentSlide] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [slideWidth, setSlideWidth] = useState(0);
+
+  const slides = React.Children.toArray(children);
+  const slideRef = useRef<HTMLUListElement>(null);
+
+  const DATA = [...slides.slice(-slidesToShow), ...slides, ...slides.slice(0, slidesToShow)];
+
+  const handleSlideChange = (direction: 'next' | 'prev') => {
+    if (isTransitioning) return;
+
+    setIsTransitioning(true);
+    setCurrentSlide((prev) => prev + (direction === 'next' ? slidesToScroll : -slidesToScroll));
+  };
+
+  const handleTransitionEnd = () => {
+    setIsTransitioning(false);
+
+    if (currentSlide >= slides.length + 1) setCurrentSlide(1);
+    if (currentSlide <= 0) setCurrentSlide(slides.length);
+  };
+
+  useLayoutEffect(() => {
+    setCurrentSlide(slidesToShow);
+  }, [slidesToShow]);
+
+  useLayoutEffect(() => {
+    if (!slideRef.current?.children[0]) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.target.getBoundingClientRect().width;
+        setSlideWidth(width);
+      }
+    });
+
+    observer.observe(slideRef.current.children[0]);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <S.Container>
-      <S.ArrowWrapper className="left" $hasCustomArrow={!!leftArrow}>
-        {leftArrow}
-      </S.ArrowWrapper>
-      <S.UlWrapper>
-        <S.SlideUl $currentSlide={currentSlide} $isTransitioning={isTransitioning}>
-          {children}
-        </S.SlideUl>
-      </S.UlWrapper>
-      <S.ArrowWrapper className="right" $hasCustomArrow={!!rightArrow}>
-        {rightArrow}
-      </S.ArrowWrapper>
-    </S.Container>
+    <>
+      <GlobalStyle />
+      <S.Container $slideWidth={slideWidth} $slidesToShow={slidesToShow}>
+        <S.ArrowWrapper className="left" $hasCustomArrow={!!leftArrow} onClick={() => handleSlideChange('prev')}>
+          {leftArrow}
+        </S.ArrowWrapper>
+        <S.UlWrapper $slideWidth={slideWidth} $slidesToShow={slidesToShow}>
+          <S.SlideUl
+            ref={slideRef}
+            $currentSlide={currentSlide}
+            $isTransitioning={isTransitioning}
+            $slidesToShow={slidesToShow}
+            $slideWidth={slideWidth}
+            onTransitionEnd={handleTransitionEnd}
+          >
+            {DATA}
+          </S.SlideUl>
+        </S.UlWrapper>
+        <S.ArrowWrapper className="right" $hasCustomArrow={!!rightArrow} onClick={() => handleSlideChange('next')}>
+          {rightArrow}
+        </S.ArrowWrapper>
+      </S.Container>
+    </>
   );
 };
 
