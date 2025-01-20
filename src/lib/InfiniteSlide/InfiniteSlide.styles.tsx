@@ -13,6 +13,34 @@ export const Container = styled.section<{
   }
 `;
 
+export const ProgressBar = styled.div<{ $isTransitioning?: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 3px;
+  background-color: #84868d;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: white;
+    // 시간도 prop으로 뚫기
+    animation: progress 4s linear;
+    animation-play-state: ${({ $isTransitioning }) => ($isTransitioning ? 'paused' : 'running')};
+  }
+
+  @keyframes progress {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+`;
+
 export const ArrowWrapper = styled.button<{ $hasCustomArrow: boolean }>`
   position: absolute;
   top: 50%;

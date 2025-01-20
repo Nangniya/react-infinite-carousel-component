@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { IProps } from './InfiniteSlide.types';
 import * as S from './InfiniteSlide.styles';
 import GlobalStyle from '../../styles/GlobalStyle';
@@ -18,6 +18,7 @@ const InfiniteSlide: React.FC<IProps> = ({
 
   const slides = React.Children.toArray(children);
   const slideRef = useRef<HTMLUListElement>(null);
+  const timerRef = useRef<number>();
 
   const DATA = [...slides.slice(-slidesToShow), ...slides, ...slides.slice(0, slidesToScroll)];
 
@@ -51,6 +52,21 @@ const InfiniteSlide: React.FC<IProps> = ({
     return () => observer.disconnect();
   }, []);
 
+  // auto: true일 때
+  useEffect(() => {
+    if (auto && !isTransitioning) {
+      timerRef.current = setTimeout(() => {
+        handleSlideChange('next');
+      }, 4000);
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [auto, isTransitioning, currentSlide]);
+
   return (
     <>
       <GlobalStyle />
@@ -59,6 +75,7 @@ const InfiniteSlide: React.FC<IProps> = ({
           {leftArrow}
         </S.ArrowWrapper>
         <S.UlWrapper $slideWidth={slideWidth} $slidesToShow={slidesToShow}>
+          {auto && <S.ProgressBar key={currentSlide} $isTransitioning={isTransitioning} />}
           <S.SlideUl
             ref={slideRef}
             $currentSlide={currentSlide}
