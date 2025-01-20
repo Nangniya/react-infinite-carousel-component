@@ -4,13 +4,13 @@ import * as S from './InfiniteSlide.styles';
 import GlobalStyle from '../../styles/GlobalStyle';
 
 const InfiniteSlide: React.FC<IProps> = ({
-  auto = false,
   slidesToShow = 3,
   slidesToScroll = 2,
   children,
   leftArrow,
   rightArrow,
-  gap = 0,
+  auto = false,
+  interval = 4,
 }) => {
   const [currentSlide, setCurrentSlide] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -57,7 +57,7 @@ const InfiniteSlide: React.FC<IProps> = ({
     if (auto && !isTransitioning) {
       timerRef.current = setTimeout(() => {
         handleSlideChange('next');
-      }, 4000);
+      }, interval * 1000);
     }
 
     return () => {
@@ -75,7 +75,7 @@ const InfiniteSlide: React.FC<IProps> = ({
           {leftArrow}
         </S.ArrowWrapper>
         <S.UlWrapper $slideWidth={slideWidth} $slidesToShow={slidesToShow}>
-          {auto && <S.ProgressBar key={currentSlide} $isTransitioning={isTransitioning} />}
+          {auto && <S.ProgressBar key={currentSlide} $isTransitioning={isTransitioning} $interval={interval} />}
           <S.SlideUl
             ref={slideRef}
             $currentSlide={currentSlide}

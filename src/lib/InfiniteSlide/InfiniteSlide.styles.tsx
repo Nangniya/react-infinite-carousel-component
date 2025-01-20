@@ -13,7 +13,7 @@ export const Container = styled.section<{
   }
 `;
 
-export const ProgressBar = styled.div<{ $isTransitioning?: boolean }>`
+export const ProgressBar = styled.div<{ $isTransitioning: boolean; $interval: number }>`
   position: relative;
   width: 100%;
   height: 3px;
@@ -26,8 +26,7 @@ export const ProgressBar = styled.div<{ $isTransitioning?: boolean }>`
     left: 0;
     height: 100%;
     background-color: white;
-    // 시간도 prop으로 뚫기
-    animation: progress 4s linear;
+    animation: ${({ $interval }) => `progress ${$interval}s linear`};
     animation-play-state: ${({ $isTransitioning }) => ($isTransitioning ? 'paused' : 'running')};
   }
 

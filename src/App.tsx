@@ -4,7 +4,7 @@ import * as S from './App.styles';
 
 const App = () => {
   return (
-    <InfiniteSlide auto={true}>
+    <InfiniteSlide auto={true} interval={1}>
       <S.SlideLi>
         <h3>1</h3>
       </S.SlideLi>
