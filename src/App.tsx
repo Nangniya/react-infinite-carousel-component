@@ -4,7 +4,13 @@ import * as S from './App.styles';
 
 const App = () => {
   return (
-    <InfiniteSlide auto={true} interval={3} rightArrow={<Arrow width="10" height="40" />}>
+    <InfiniteSlide
+      auto={true}
+      slidesToShow={2}
+      slidesToScroll={2}
+      interval={3}
+      rightArrow={<Arrow width="10" height="40" />}
+    >
       <S.SlideLi>
         <h3>1</h3>
       </S.SlideLi>

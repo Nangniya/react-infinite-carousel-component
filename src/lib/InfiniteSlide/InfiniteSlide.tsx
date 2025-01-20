@@ -4,8 +4,8 @@ import * as S from './InfiniteSlide.styles';
 import GlobalStyle from '../../styles/GlobalStyle';
 
 const InfiniteSlide: React.FC<IProps> = ({
-  slidesToShow = 3,
-  slidesToScroll = 2,
+  slidesToShow = 1,
+  slidesToScroll = 1,
   children,
   leftArrow,
   rightArrow,
