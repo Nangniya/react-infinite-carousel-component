@@ -5,8 +5,8 @@ import GlobalStyle from '../../styles/GlobalStyle';
 
 const InfiniteSlide: React.FC<IProps> = ({
   auto = false,
-  slidesToShow = 1,
-  slidesToScroll = 1,
+  slidesToShow = 3,
+  slidesToScroll = 2,
   children,
   leftArrow,
   rightArrow,
@@ -19,7 +19,7 @@ const InfiniteSlide: React.FC<IProps> = ({
   const slides = React.Children.toArray(children);
   const slideRef = useRef<HTMLUListElement>(null);
 
-  const DATA = [...slides.slice(-slidesToShow), ...slides, ...slides.slice(0, slidesToShow)];
+  const DATA = [...slides.slice(-slidesToShow), ...slides, ...slides.slice(0, slidesToScroll)];
 
   const handleSlideChange = (direction: 'next' | 'prev') => {
     if (isTransitioning) return;
@@ -31,7 +31,7 @@ const InfiniteSlide: React.FC<IProps> = ({
   const handleTransitionEnd = () => {
     setIsTransitioning(false);
 
-    if (currentSlide >= slides.length + 1) setCurrentSlide(1);
+    if (currentSlide >= slides.length + slidesToShow) setCurrentSlide(slidesToShow);
     if (currentSlide <= 0) setCurrentSlide(slides.length);
   };
 
@@ -42,15 +42,12 @@ const InfiniteSlide: React.FC<IProps> = ({
   useLayoutEffect(() => {
     if (!slideRef.current?.children[0]) return;
 
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const width = entry.target.getBoundingClientRect().width;
-        setSlideWidth(width);
-      }
+    const observer = new ResizeObserver(([entry]) => {
+      const width = entry.target.getBoundingClientRect().width;
+      setSlideWidth(width);
     });
 
     observer.observe(slideRef.current.children[0]);
-
     return () => observer.disconnect();
   }, []);
 
