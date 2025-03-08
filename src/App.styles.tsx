@@ -10,3 +10,14 @@ export const SlideItem = styled.div`
     background-color: skyblue;
   }
 `;
+
+export const SlideItem1 = styled.div`
+  display: flex;
+  width: 100dvw;
+  height: 200px;
+  padding: 20px;
+  h3 {
+    width: 100%;
+    background-color: orange;
+  }
+`;

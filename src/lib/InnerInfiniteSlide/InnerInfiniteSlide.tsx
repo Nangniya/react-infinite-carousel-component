@@ -24,8 +24,6 @@ const InnerInfiniteSlide: React.FC<IProps> = ({
     return [...slides.slice(-slidesToScroll), ...slides, ...slides.slice(0, slidesToScroll)];
   }, [slidesToScroll]);
 
-  console.log(DATA.length);
-
   const handleNextSlide = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
@@ -52,7 +50,7 @@ const InnerInfiniteSlide: React.FC<IProps> = ({
     if (currentSlide <= 0) setCurrentSlide(slides.length);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setCurrentSlide(slidesToScroll);
   }, [slidesToScroll]);
 
