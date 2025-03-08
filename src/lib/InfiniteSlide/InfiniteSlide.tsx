@@ -1,10 +1,9 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { IProps } from './InfiniteSlide.types';
-import * as S from './InfiniteSlide.styles';
 import GlobalStyle from '../../styles/GlobalStyle';
+import * as S from './InfiniteSlide.styles';
 
 const InfiniteSlide: React.FC<IProps> = ({
-  slidesToShow = 1,
   slidesToScroll = 1,
   children,
   leftArrow,
@@ -16,29 +15,42 @@ const InfiniteSlide: React.FC<IProps> = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [slideWidth, setSlideWidth] = useState(0);
 
-  const slides = React.Children.toArray(children);
   const slideRef = useRef<HTMLUListElement>(null);
-  const timerRef = useRef<number>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<NodeJS.Timeout>();
 
-  const DATA = [...slides.slice(-slidesToShow), ...slides, ...slides.slice(0, slidesToScroll)];
+  const slides = React.Children.toArray(children);
+  const DATA = [...slides.slice(-slidesToScroll), ...slides, ...slides.slice(0, slidesToScroll)];
 
-  const handleSlideChange = (direction: 'next' | 'prev') => {
+  const handleNextSlide = () => {
     if (isTransitioning) return;
-
     setIsTransitioning(true);
-    setCurrentSlide((prev) => prev + (direction === 'next' ? slidesToScroll : -slidesToScroll));
+    if (currentSlide !== slides.length && currentSlide + 2 * slidesToScroll > slides.length + slidesToScroll) {
+      setCurrentSlide(slides.length);
+    } else {
+      setCurrentSlide((prev) => prev + slidesToScroll);
+    }
+  };
+
+  const handlePrevSlide = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    if (currentSlide !== slidesToScroll && currentSlide - slidesToScroll < slidesToScroll) {
+      setCurrentSlide(slidesToScroll);
+    } else {
+      setCurrentSlide((prev) => prev - slidesToScroll);
+    }
   };
 
   const handleTransitionEnd = () => {
     setIsTransitioning(false);
-
-    if (currentSlide >= slides.length + slidesToShow) setCurrentSlide(slidesToShow);
+    if (currentSlide >= slides.length + slidesToScroll) setCurrentSlide(slidesToScroll);
     if (currentSlide <= 0) setCurrentSlide(slides.length);
   };
 
   useLayoutEffect(() => {
-    setCurrentSlide(slidesToShow);
-  }, [slidesToShow]);
+    setCurrentSlide(slidesToScroll);
+  }, [slidesToScroll]);
 
   useLayoutEffect(() => {
     if (!slideRef.current?.children[0]) return;
@@ -55,39 +67,33 @@ const InfiniteSlide: React.FC<IProps> = ({
   // auto: true일 때
   useEffect(() => {
     if (auto && !isTransitioning) {
-      timerRef.current = setTimeout(() => {
-        handleSlideChange('next');
-      }, interval * 1000);
+      timerRef.current = setTimeout(handleNextSlide, interval * 1000);
     }
-
     return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [auto, isTransitioning, currentSlide]);
 
   return (
     <>
       <GlobalStyle />
-      <S.Container $slideWidth={slideWidth} $slidesToShow={slidesToShow}>
-        <S.ArrowWrapper className="left" $hasCustomArrow={!!leftArrow} onClick={() => handleSlideChange('prev')}>
+      <S.Container>
+        <S.ArrowWrapper className="left" $hasCustomArrow={!!leftArrow} onClick={handlePrevSlide}>
           {leftArrow}
         </S.ArrowWrapper>
-        <S.UlWrapper $slideWidth={slideWidth} $slidesToShow={slidesToShow}>
+        <S.UlWrapper ref={containerRef}>
           {auto && <S.ProgressBar key={currentSlide} $isTransitioning={isTransitioning} $interval={interval} />}
           <S.SlideUl
             ref={slideRef}
             $currentSlide={currentSlide}
             $isTransitioning={isTransitioning}
-            $slidesToShow={slidesToShow}
             $slideWidth={slideWidth}
             onTransitionEnd={handleTransitionEnd}
           >
             {DATA}
           </S.SlideUl>
         </S.UlWrapper>
-        <S.ArrowWrapper className="right" $hasCustomArrow={!!rightArrow} onClick={() => handleSlideChange('next')}>
+        <S.ArrowWrapper className="right" $hasCustomArrow={!!rightArrow} onClick={handleNextSlide}>
           {rightArrow}
         </S.ArrowWrapper>
       </S.Container>

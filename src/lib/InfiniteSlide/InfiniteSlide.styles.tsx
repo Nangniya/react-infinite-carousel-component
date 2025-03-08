@@ -1,12 +1,9 @@
 import styled from '@emotion/styled';
 import { resetButtonStyle } from '../../styles/common';
 
-export const Container = styled.section<{
-  $slidesToShow: number;
-  $slideWidth: number;
-}>`
+export const Container = styled.section`
   position: relative;
-  width: ${({ $slidesToShow, $slideWidth }) => `${$slidesToShow * $slideWidth}px`};
+  width: 100%;
 
   &:hover button {
     opacity: 1;
@@ -74,24 +71,20 @@ export const ArrowWrapper = styled.button<{ $hasCustomArrow: boolean }>`
   }
 `;
 
-export const UlWrapper = styled.div<{
-  $slidesToShow: number;
-  $slideWidth: number;
-}>`
+export const UlWrapper = styled.div`
   overflow: hidden;
-  width: ${({ $slidesToShow, $slideWidth }) => `${$slidesToShow * $slideWidth}px`};
+  width: 100%;
 `;
 
 export const SlideUl = styled.ul<{
   $currentSlide: number;
   $isTransitioning: boolean;
-  $slidesToShow: number;
   $slideWidth: number;
 }>`
   display: flex;
   // transform, transition 작성
   transform: translateX(${({ $currentSlide, $slideWidth }) => `${-($currentSlide * $slideWidth)}px`});
-  transition: ${({ $isTransitioning }) => ($isTransitioning ? 'transform 0.8s ease-in-out' : 'none')};
+  transition: ${({ $isTransitioning }) => ($isTransitioning ? 'transform 1s ease-in-out' : 'none')};
 
   & > * {
     flex-shrink: 0;
