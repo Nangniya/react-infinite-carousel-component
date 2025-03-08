@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const SlideLi = styled.div`
+export const SlideItem = styled.div`
   display: flex;
   width: 250px;
   height: 200px;
