@@ -1,4 +1,4 @@
-import InfiniteSlide from './lib/InfiniteSlide/InfiniteSlide';
+import InfiniteSlide from 'react-infinite-slides';
 import Arrow from './assets/icons/arrow.svg?react';
 import * as S from './App.styles';
 
