@@ -17,7 +17,7 @@ const InnerInfiniteSlide: React.FC<IProps> = ({
 
   const slideRef = useRef<HTMLUListElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<NodeJS.Timeout>();
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const slides = React.Children.toArray(children);
   const DATA = useMemo(() => {
