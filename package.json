@@ -1,7 +1,7 @@
 {
   "name": "react-infinite-slides",
   "private": false,
-  "version": "0.0.0",
+  "version": "0.0.9",
   "type": "module",
   "files": [
     "dist"
@@ -15,11 +15,11 @@
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs"
     },
-    "./styles": {
-      "import": "./dist/index.css",
-      "require": "./dist/index.css"
-    }
+    "./style": "./dist/index.css"
   },
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -27,8 +27,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
+    "@vanilla-extract/css": "^1.17.1",
+    "@vanilla-extract/dynamic": "^2.1.2",
+    "@vanilla-extract/recipes": "^0.5.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -41,6 +42,7 @@
     "@types/node": "^22.13.9",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@vanilla-extract/vite-plugin": "^5.0.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",

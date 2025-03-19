@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import svgr from 'vite-plugin-svgr';
 import dts from 'vite-plugin-dts';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -16,12 +17,14 @@ export default defineConfig({
       outDir: 'dist',
       tsconfigPath: './tsconfig.build.json',
     }),
+    vanillaExtractPlugin(),
   ],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/lib/index.ts'),
       formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format == 'es' ? 'mjs' : 'cjs'}`,
+      fileName: (format, entryName) =>
+        entryName === 'style' ? 'index.css' : `index.${format == 'es' ? 'mjs' : 'cjs'}`,
     },
     rollupOptions: {
       external: ['react', 'react-dom'],
@@ -30,6 +33,7 @@ export default defineConfig({
           react: 'React',
           'react-dom': 'ReactDOM',
         },
+        assetFileNames: 'index.[ext]',
       },
     },
     sourcemap: true,

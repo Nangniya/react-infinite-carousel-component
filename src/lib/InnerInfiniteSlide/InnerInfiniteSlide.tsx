@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { IProps } from './InnerInfiniteSlide.types';
-import GlobalStyle from '../../styles/GlobalStyle';
-import * as S from './InnerInfiniteSlide.styles';
+import '../style.css';
 
 const InnerInfiniteSlide: React.FC<IProps> = ({
   slidesToScroll,
@@ -22,7 +21,7 @@ const InnerInfiniteSlide: React.FC<IProps> = ({
   const slides = React.Children.toArray(children);
   const DATA = useMemo(() => {
     return [...slides.slice(-slidesToScroll), ...slides, ...slides.slice(0, slidesToScroll)];
-  }, [slidesToScroll]);
+  }, [slidesToScroll, slides]);
 
   const handleNextSlide = () => {
     if (isTransitioning) return;
@@ -74,34 +73,43 @@ const InnerInfiniteSlide: React.FC<IProps> = ({
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [auto, isTransitioning, currentSlide]);
+  }, [auto, isTransitioning, currentSlide, interval]);
 
   return (
-    <>
-      <GlobalStyle />
-      <S.Container>
-        <S.ArrowWrapper className="left" $hasCustomArrow={!!leftArrow} onClick={handlePrevSlide}>
-          {leftArrow}
-        </S.ArrowWrapper>
-        <S.UlWrapper ref={containerRef}>
-          {auto && <S.ProgressBar key={currentSlide} $isTransitioning={isTransitioning} $interval={interval} />}
-          <S.SlideUl
-            ref={slideRef}
-            $currentSlide={currentSlide}
-            $isTransitioning={isTransitioning}
-            $slideWidth={slideWidth}
-            onTransitionEnd={handleTransitionEnd}
-          >
-            {DATA.map((slide, index) => (
-              <li key={index}>{slide}</li>
-            ))}
-          </S.SlideUl>
-        </S.UlWrapper>
-        <S.ArrowWrapper className="right" $hasCustomArrow={!!rightArrow} onClick={handleNextSlide}>
-          {rightArrow}
-        </S.ArrowWrapper>
-      </S.Container>
-    </>
+    <section className="container">
+      <button className={`arrow-wrapper left ${!leftArrow ? 'default' : ''}`} onClick={handlePrevSlide}>
+        {leftArrow}
+      </button>
+      <div className="ul-wrapper" ref={containerRef}>
+        {auto && (
+          <div
+            className={`progress-bar ${isTransitioning ? 'paused' : 'running'}`}
+            key={currentSlide}
+            style={
+              {
+                '--animation-duration': `${interval}s`,
+              } as React.CSSProperties
+            }
+          />
+        )}
+        <ul
+          className="slide-ul"
+          ref={slideRef}
+          style={{
+            transform: `translateX(${-(currentSlide * slideWidth)}px)`,
+            transition: isTransitioning ? 'transform 1s ease-in-out' : 'none',
+          }}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {DATA.map((slide, index) => (
+            <li key={index}>{slide}</li>
+          ))}
+        </ul>
+      </div>
+      <button className={`arrow-wrapper right ${!rightArrow ? 'default' : ''}`} onClick={handleNextSlide}>
+        {rightArrow}
+      </button>
+    </section>
   );
 };
 
