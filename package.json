@@ -1,7 +1,7 @@
 {
   "name": "react-infinite-slides",
   "private": false,
-  "version": "0.0.10",
+  "version": "0.0.12",
   "type": "module",
   "files": [
     "dist"
@@ -15,7 +15,7 @@
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs"
     },
-    "./style": "./dist/index.css"
+    "./style.css": "./dist/index.css"
   },
   "sideEffects": [
     "*.css"
@@ -28,8 +28,6 @@
   },
   "dependencies": {
     "@vanilla-extract/css": "^1.17.1",
-    "@vanilla-extract/dynamic": "^2.1.2",
-    "@vanilla-extract/recipes": "^0.5.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
