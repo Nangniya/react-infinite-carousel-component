@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "react-infinite-slides": {
+      "signature": "c2205ec54b6cbaa4a5adbf132eb87ad9",
+      "file": true
+    }
+  }
+}
