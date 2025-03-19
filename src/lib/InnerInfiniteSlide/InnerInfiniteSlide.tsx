@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { IProps } from './InnerInfiniteSlide.types';
-import '../style.css';
+import * as styles from './InnerInfiniteSlide.css';
 
 const InnerInfiniteSlide: React.FC<IProps> = ({
   slidesToScroll,
@@ -76,37 +76,34 @@ const InnerInfiniteSlide: React.FC<IProps> = ({
   }, [auto, isTransitioning, currentSlide, interval]);
 
   return (
-    <section className="container">
-      <button className={`arrow-wrapper left ${!leftArrow ? 'default' : ''}`} onClick={handlePrevSlide}>
+    <section className={styles.container}>
+      <button className={`${styles.leftArrow} ${!leftArrow && styles.defaultLeftArrow}`} onClick={handlePrevSlide}>
         {leftArrow}
       </button>
-      <div className="ul-wrapper" ref={containerRef}>
+      <div className={styles.ulWrapper} ref={containerRef}>
         {auto && (
           <div
-            className={`progress-bar ${isTransitioning ? 'paused' : 'running'}`}
+            className={`${styles.progressBar} ${isTransitioning ? styles.paused : styles.running}`}
             key={currentSlide}
-            style={
-              {
-                '--animation-duration': `${interval}s`,
-              } as React.CSSProperties
-            }
+            style={{ animationDuration: `${interval}s` }}
           />
         )}
         <ul
-          className="slide-ul"
+          className={`${styles.slideUl} ${isTransitioning ? styles.transitioning : styles.transitionNone}`}
           ref={slideRef}
           style={{
             transform: `translateX(${-(currentSlide * slideWidth)}px)`,
-            transition: isTransitioning ? 'transform 1s ease-in-out' : 'none',
           }}
           onTransitionEnd={handleTransitionEnd}
         >
           {DATA.map((slide, index) => (
-            <li key={index}>{slide}</li>
+            <li key={index} className={styles.slideLi}>
+              {slide}
+            </li>
           ))}
         </ul>
       </div>
-      <button className={`arrow-wrapper right ${!rightArrow ? 'default' : ''}`} onClick={handleNextSlide}>
+      <button className={`${styles.rightArrow} ${!rightArrow && styles.defaultRightArrow}`} onClick={handleNextSlide}>
         {rightArrow}
       </button>
     </section>
