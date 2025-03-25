@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import InnerInfiniteSlide from '../InnerInfiniteSlide/InnerInfiniteSlide';
 import { IProps } from './InfiniteSlide.types';
 
@@ -10,12 +10,16 @@ const InfiniteSlide: React.FC<IProps> = ({
   auto = false,
   interval = 4,
   responsive = [],
+  arrowsOverlay = false,
+  gap = 0,
 }) => {
   const [effectiveSlidesToScroll, setEffectiveSlidesToScroll] = useState(0);
-  useLayoutEffect(() => {
+
+  const updateSlidesToScroll = () => {
     if (responsive.length > 0) {
       const width = window.innerWidth;
       const matchedSetting = responsive.sort((a, b) => b.breakpoint - a.breakpoint).find((r) => width >= r.breakpoint);
+
       if (matchedSetting) {
         setEffectiveSlidesToScroll(matchedSetting.slidesToScroll);
       } else {
@@ -24,16 +28,31 @@ const InfiniteSlide: React.FC<IProps> = ({
     } else {
       setEffectiveSlidesToScroll(slidesToScroll);
     }
+  };
+
+  useLayoutEffect(() => {
+    updateSlidesToScroll();
   }, []);
+
+  useEffect(() => {
+    window.addEventListener('resize', updateSlidesToScroll);
+
+    return () => {
+      window.removeEventListener('resize', updateSlidesToScroll);
+    };
+  }, [responsive, slidesToScroll]);
 
   return (
     <InnerInfiniteSlide
       slidesToScroll={effectiveSlidesToScroll}
       children={children}
-      leftArrow={leftArrow}
-      rightArrow={rightArrow}
+      gap={gap}
+      leftArrow={leftArrow || null}
+      rightArrow={rightArrow || null}
       auto={auto}
       interval={interval}
+      arrowsOverlay={arrowsOverlay}
+      responsive={responsive}
     />
   );
 };

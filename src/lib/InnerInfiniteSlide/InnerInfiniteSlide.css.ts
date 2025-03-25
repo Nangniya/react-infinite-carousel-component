@@ -19,14 +19,29 @@ const arrowWrapperBase = style([
     position: 'absolute',
     top: '50%',
     transform: 'translateY(-50%)',
+    zIndex: 1,
+  },
+]);
+
+// 오버레이 모드 화살표 스타일 (hover 시에만 표시)
+export const arrowOverlay = style([
+  arrowWrapperBase,
+  {
     opacity: 0,
     transition: 'opacity 0.3s',
-    zIndex: 1,
     selectors: {
       [`${container}:hover &`]: {
         opacity: 1,
       },
     },
+  },
+]);
+
+// 일반 모드 화살표 스타일 (항상 표시)
+export const arrowVisible = style([
+  arrowWrapperBase,
+  {
+    opacity: 1, // 항상 보이도록 설정
   },
 ]);
 
@@ -48,6 +63,7 @@ export const defaultLeftArrow = style({
   '::before': {
     content: '←',
     fontSize: 20,
+    padding: '10px',
   },
 });
 
@@ -55,6 +71,7 @@ export const defaultRightArrow = style({
   '::before': {
     content: '→',
     fontSize: 20,
+    padding: '10px',
   },
 });
 

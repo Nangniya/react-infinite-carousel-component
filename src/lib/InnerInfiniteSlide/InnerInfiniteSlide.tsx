@@ -1,21 +1,26 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { IProps } from './InnerInfiniteSlide.types';
+import { IProps } from '../InfiniteSlide/InfiniteSlide.types';
 import * as styles from './InnerInfiniteSlide.css';
 
-const InnerInfiniteSlide: React.FC<IProps> = ({
+const InnerInfiniteSlide: React.FC<Required<IProps>> = ({
   slidesToScroll,
   children,
   leftArrow,
   rightArrow,
-  auto = false,
-  interval = 4,
+  auto,
+  interval,
+  arrowsOverlay,
+  gap,
 }) => {
   const [currentSlide, setCurrentSlide] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [slideWidth, setSlideWidth] = useState(0);
+  const [arrowWidths, setArrowWidths] = useState({ left: 0, right: 0 });
 
   const slideRef = useRef<HTMLUListElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const leftArrowRef = useRef<HTMLButtonElement>(null);
+  const rightArrowRef = useRef<HTMLButtonElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const slides = React.Children.toArray(children);
@@ -53,6 +58,15 @@ const InnerInfiniteSlide: React.FC<IProps> = ({
     setCurrentSlide(slidesToScroll);
   }, [slidesToScroll]);
 
+  // 화살표 너비 측정
+  useLayoutEffect(() => {
+    if (!arrowsOverlay && leftArrowRef.current && rightArrowRef.current) {
+      const leftWidth = leftArrowRef.current.offsetWidth;
+      const rightWidth = rightArrowRef.current.offsetWidth;
+      setArrowWidths({ left: leftWidth, right: rightWidth });
+    }
+  }, [arrowsOverlay, leftArrow, rightArrow]);
+
   useLayoutEffect(() => {
     if (!slideRef.current?.children[0]) return;
 
@@ -75,9 +89,20 @@ const InnerInfiniteSlide: React.FC<IProps> = ({
     };
   }, [auto, isTransitioning, currentSlide, interval]);
 
+  const containerStyle = !arrowsOverlay
+    ? {
+        paddingLeft: `${arrowWidths.left}px`,
+        paddingRight: `${arrowWidths.right}px`,
+      }
+    : {};
+
   return (
-    <section className={styles.container}>
-      <button className={`${styles.leftArrow} ${!leftArrow && styles.defaultLeftArrow}`} onClick={handlePrevSlide}>
+    <section className={styles.container} style={containerStyle}>
+      <button
+        ref={leftArrowRef}
+        className={`${arrowsOverlay ? styles.arrowOverlay : styles.arrowVisible} ${styles.leftArrow} ${!leftArrow && styles.defaultLeftArrow}`}
+        onClick={handlePrevSlide}
+      >
         {leftArrow}
       </button>
       <div className={styles.ulWrapper} ref={containerRef}>
@@ -92,7 +117,8 @@ const InnerInfiniteSlide: React.FC<IProps> = ({
           className={`${styles.slideUl} ${isTransitioning ? styles.transitioning : styles.transitionNone}`}
           ref={slideRef}
           style={{
-            transform: `translateX(${-(currentSlide * slideWidth)}px)`,
+            transform: `translateX(${-(currentSlide * (slideWidth + gap))}px)`,
+            gap: `${gap}px`,
           }}
           onTransitionEnd={handleTransitionEnd}
         >
@@ -103,7 +129,11 @@ const InnerInfiniteSlide: React.FC<IProps> = ({
           ))}
         </ul>
       </div>
-      <button className={`${styles.rightArrow} ${!rightArrow && styles.defaultRightArrow}`} onClick={handleNextSlide}>
+      <button
+        ref={rightArrowRef}
+        className={`${arrowsOverlay ? styles.arrowOverlay : styles.arrowVisible} ${styles.rightArrow} ${!rightArrow && styles.defaultRightArrow}`}
+        onClick={handleNextSlide}
+      >
         {rightArrow}
       </button>
     </section>
