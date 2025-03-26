@@ -13,4 +13,5 @@ export interface IProps {
   interval?: number; // auto일 때 시간 간격
   responsive?: IResponsiveSetting[]; // 반응형
   arrowsOverlay?: boolean; // 화살표를 컨텐츠 위에 겹치게 할지 여부
+  arrowsAlwaysVisible?: boolean; // 화살표를 항상 표시할지 여부
 }

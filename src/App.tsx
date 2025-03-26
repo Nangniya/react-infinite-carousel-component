@@ -4,6 +4,7 @@ const App = () => {
   const settings1 = {
     slidesToScroll: 1,
     gap: 20,
+    arrowsAlwaysVisible: true,
   };
 
   const slideItem1Style = {

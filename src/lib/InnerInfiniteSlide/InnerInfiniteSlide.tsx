@@ -10,6 +10,7 @@ const InnerInfiniteSlide: React.FC<Required<IProps>> = ({
   auto,
   interval,
   arrowsOverlay,
+  arrowsAlwaysVisible,
   gap,
 }) => {
   const [currentSlide, setCurrentSlide] = useState(1);
@@ -100,7 +101,7 @@ const InnerInfiniteSlide: React.FC<Required<IProps>> = ({
     <section className={styles.container} style={containerStyle}>
       <button
         ref={leftArrowRef}
-        className={`${arrowsOverlay ? styles.arrowOverlay : styles.arrowVisible} ${styles.leftArrow} ${!leftArrow && styles.defaultLeftArrow}`}
+        className={`${arrowsAlwaysVisible ? styles.arrowVisible : styles.arrowHover} ${styles.leftArrow} ${!leftArrow && styles.defaultLeftArrow}`}
         onClick={handlePrevSlide}
       >
         {leftArrow}
@@ -131,7 +132,7 @@ const InnerInfiniteSlide: React.FC<Required<IProps>> = ({
       </div>
       <button
         ref={rightArrowRef}
-        className={`${arrowsOverlay ? styles.arrowOverlay : styles.arrowVisible} ${styles.rightArrow} ${!rightArrow && styles.defaultRightArrow}`}
+        className={`${arrowsAlwaysVisible ? styles.arrowVisible : styles.arrowHover} ${styles.rightArrow} ${!rightArrow && styles.defaultRightArrow}`}
         onClick={handleNextSlide}
       >
         {rightArrow}
