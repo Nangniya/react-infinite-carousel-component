@@ -23,8 +23,8 @@ const arrowWrapperBase = style([
   },
 ]);
 
-// 오버레이 모드 화살표 스타일 (hover 시에만 표시)
-export const arrowOverlay = style([
+// 화살표 hover 시에만 표시
+export const arrowHover = style([
   arrowWrapperBase,
   {
     opacity: 0,
@@ -37,11 +37,11 @@ export const arrowOverlay = style([
   },
 ]);
 
-// 일반 모드 화살표 스타일 (항상 표시)
+// 화살표 항상 표시
 export const arrowVisible = style([
   arrowWrapperBase,
   {
-    opacity: 1, // 항상 보이도록 설정
+    opacity: 1,
   },
 ]);
 

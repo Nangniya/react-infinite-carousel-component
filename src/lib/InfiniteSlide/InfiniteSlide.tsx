@@ -11,6 +11,7 @@ const InfiniteSlide: React.FC<IProps> = ({
   interval = 4,
   responsive = [],
   arrowsOverlay = false,
+  arrowsAlwaysVisible = false,
   gap = 0,
 }) => {
   const [effectiveSlidesToScroll, setEffectiveSlidesToScroll] = useState(0);
@@ -52,6 +53,7 @@ const InfiniteSlide: React.FC<IProps> = ({
       auto={auto}
       interval={interval}
       arrowsOverlay={arrowsOverlay}
+      arrowsAlwaysVisible={arrowsAlwaysVisible}
       responsive={responsive}
     />
   );
