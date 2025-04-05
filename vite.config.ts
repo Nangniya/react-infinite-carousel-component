@@ -23,11 +23,10 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/lib/index.ts'),
       formats: ['es', 'cjs'],
-      fileName: (format, entryName) =>
-        entryName === 'style' ? 'index.css' : `index.${format == 'es' ? 'mjs' : 'cjs'}`,
+      fileName: (format) => `index.${format == 'es' ? 'mjs' : 'cjs'}`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', /^react($|\/)/, /^react-dom($|\/)/],
       output: {
         globals: {
           react: 'React',

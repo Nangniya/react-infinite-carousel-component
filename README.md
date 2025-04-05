@@ -114,7 +114,7 @@ function App() {
 
 ## 기술 스택
 
-- **React** : 18.x 지원 (React 19 미지원)
+- **React** : 18, 19버전 지원
 - **TypeScript** : 타입스크립트 지원
 - **Vanilla Extract** : zero-runtime & 클래스네임 중복 방지, 동적 스타일링은 인라인으로 보완
 - **Vite** : 라이브러리 모드로 번들링 (CommonJS와 ESModule 지원)
