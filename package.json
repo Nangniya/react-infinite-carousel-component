@@ -1,7 +1,11 @@
 {
   "name": "react-infinite-carousel-component",
   "private": false,
-  "version": "0.1.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nangniya/react-infinite-carousel-component.git"
+  },
+  "version": "0.2.0",
   "type": "module",
   "files": [
     "dist"
@@ -27,21 +31,16 @@
     "preview": "vite preview"
   },
   "license": "MIT",
-  "dependencies": {
-    "@vanilla-extract/css": "^1.17.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "styled-reset": "^4.5.2"
-  },
   "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@types/node": "^22.13.9",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@vanilla-extract/css": "^1.17.1",
     "@vanilla-extract/vite-plugin": "^5.0.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "eslint": "^9.17.0",
@@ -49,6 +48,9 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "styled-reset": "^4.5.2",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5",
